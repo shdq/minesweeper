@@ -1,14 +1,17 @@
 import React, { Component } from "react";
+import Cell from "./components/cellComponent";
 import styled from "styled-components";
 
-import Cell from "./components/cellComponent";
+const Wrapper = styled.span`
+  display: flex;
+`;
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <Cell />
-      </div>
+      <Wrapper>
+        <Cell value="💣" />
+      </Wrapper>
     );
   }
 }

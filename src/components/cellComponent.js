@@ -35,7 +35,11 @@ class Cell extends React.Component {
   }
 
   render() {
-    return <Square onContextMenu={this.handleClick}>{ this.state.isFlagged ? "🚩" : "" }</Square>;
+    return (
+      <Square onContextMenu={this.handleClick}>
+        {this.state.isFlagged ? "🚩" : ""}
+      </Square>
+    );
   }
 }
 

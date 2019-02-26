@@ -6,7 +6,7 @@ const Wrapper = styled.span`
   border: 2px solid #b6c3d1;
   display: flex;
   flex-wrap: wrap;
-  width: 360px;
+  width: ${props => (props.width * 40 + "px")};
 `;
 
 class Field {
@@ -89,6 +89,11 @@ class Field {
 
 class App extends Component {
   render() {
+    /*
+      easy:   9x9, 10 mines
+      medium: 16x16, 40 mines
+      hard:   30x12, 99 mines
+    */
     const field = new Field(9, 9, 10);
     field.init();
     console.log(field);
@@ -100,7 +105,7 @@ class App extends Component {
       );
     }
 
-    return <Wrapper>{grid}</Wrapper>;
+    return <Wrapper width={field.width}>{grid}</Wrapper>;
   }
 }
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 
 import styled from "styled-components";
 
@@ -6,7 +6,15 @@ const Square = styled.span`
   position: relative;
   width: 40px;
   height: 40px;
-  background-color: ${props => (props.isFlagged ? "#c8d6e5" : "#8395a7")};
+  background-color: ${props => {
+    if (props.isFlagged && props.isEven) {
+      return "#c8d6e5";
+    }
+    if (props.isFlagged && !props.isEven) {
+      return "#b6c3d1";
+    }
+    if (!props.isFlagged) return "#ebf0f5;";
+  }};
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -20,15 +28,15 @@ const Square = styled.span`
     content: "";
     width: ${props => (props.isOpened || props.isFlagged ? "0px" : "40px")};
     height: ${props => (props.isOpened || props.isFlagged ? "0px" : "40px")};
-    ${props => (props.isFlagged ? "" : "background-color: #c8d6e5")};
+    background-color: ${props => (props.isEven ? "#c8d6e5" : "#b6c3d1")};
   }
 
-  &:hover:before {
-    background-color: ${props => (!props.isFlagged ? "#8395a7" : "#c8d6e5")};
+  &:hover {
+    opacity: ${props => (!props.isOpened ? "0.85" : "")};
   }
 `;
 
-class Cell extends React.Component {
+class Cell extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,9 +50,16 @@ class Cell extends React.Component {
 
   handleClick(e) {
     e.preventDefault();
-    this.setState({
-      isOpened: !this.state.isFlagged
-    });
+    if (!this.state.isFlagged) {
+      this.setState({
+        isOpened: true
+      });
+    }
+    if (this.state.value === "💣") {
+      this.setState({
+        value: "💥"
+      });
+    }
     console.log("Left click was clicked.");
   }
 
@@ -59,14 +74,17 @@ class Cell extends React.Component {
   }
 
   render() {
+    let value;
+    this.state.value === 0 ? (value = "") : (value = this.state.value);
     return (
       <Square
+        isEven={this.props.background % 2 === 0 ? true : false}
         isOpened={this.state.isOpened}
         isFlagged={this.state.isFlagged}
         onContextMenu={this.handleRightClick}
         onClick={this.handleClick}
       >
-        {this.state.isFlagged ? "🚩" : this.state.value}
+        {this.state.isFlagged ? "🚩" : value}
       </Square>
     );
   }

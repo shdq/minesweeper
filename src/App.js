@@ -89,13 +89,21 @@ class Field {
 }
 
 class App extends Component {
-  render() {
+  constructor(props) {
+    super(props);
     /*
       easy:   9x9, 10 mines
       medium: 16x16, 40 mines
       hard:   30x12, 99 mines
     */
-    const field = new Field(9, 9, 10);
+    this.state = {
+      width: 9,
+      height: 9,
+      mines: 10
+    }
+  }
+  render() {
+    const field = new Field(this.state.width, this.state.height, this.state.mines);
     field.init();
     console.log(field);
 

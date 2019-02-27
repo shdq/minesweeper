@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Timer from "./components/timerComponent";
 import Cell from "./components/cellComponent";
 import styled from "styled-components";
 
@@ -6,7 +7,7 @@ const Wrapper = styled.span`
   border: 2px solid #b6c3d1;
   display: flex;
   flex-wrap: wrap;
-  width: ${props => (props.width * 40 + "px")};
+  width: ${props => props.width * 40 + "px"};
 `;
 
 class Field {
@@ -105,7 +106,12 @@ class App extends Component {
       );
     }
 
-    return <Wrapper width={field.width}>{grid}</Wrapper>;
+    return (
+      <React.Fragment>
+        <Timer />
+        <Wrapper width={field.width}>{grid}</Wrapper>
+      </React.Fragment>
+    );
   }
 }
 

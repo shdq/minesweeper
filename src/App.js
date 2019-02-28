@@ -13,6 +13,8 @@ const Panel = styled.div`
   color: #2e5266;
 `
 
+const Mood = styled.span``
+
 const Wrapper = styled.span`
   border: 2px solid #b6c3d1;
   display: flex;
@@ -109,9 +111,25 @@ class App extends Component {
     this.state = {
       width: 9,
       height: 9,
-      mines: 10
+      mines: 10,
+      mood: "🙂" // 🙂😨😎😵
     }
+    this.handleMouseDown = this.handleMouseDown.bind(this);
+    this.handleMouseUp = this.handleMouseUp.bind(this);
   }
+
+  handleMouseDown() {
+    this.setState({
+      mood: "😰"
+    })
+  }
+
+  handleMouseUp() {
+    this.setState({
+      mood: "🙂"
+    })
+  }
+
   render() {
     const field = new Field(this.state.width, this.state.height, this.state.mines);
     field.init();
@@ -128,10 +146,10 @@ class App extends Component {
       <React.Fragment>
         <Panel>
           <Timer />
-          <span>😎</span>
+          <Mood>{this.state.mood}</Mood>
           <Count flagged={this.state.mines} />
         </Panel>
-        <Wrapper width={field.width}>{grid}</Wrapper>
+        <Wrapper onMouseUp={this.handleMouseUp} onMouseDown={this.handleMouseDown} width={field.width}>{grid}</Wrapper>
       </React.Fragment>
     );
   }

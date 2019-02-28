@@ -20,6 +20,25 @@ const Square = styled.span`
   justify-content: center;
   font-size: 1.5rem;
   cursor: default;
+  color: ${props => {
+    switch (props.value) {
+      case 1:
+      return "#4169e1;";
+      case 2:
+      return "#228b22";
+      case 3:
+      return "#dc143c";
+      case 4:
+      return "#00008b";
+      case 5:
+      return "#a0522d";
+      case 6:
+      return "#ff00ff";
+      default:
+      return "#000000;";
+    }
+  }};
+  font-weight: 600;
 
   &:before {
     position: absolute;
@@ -83,6 +102,7 @@ class Cell extends Component {
         isFlagged={this.state.isFlagged}
         onContextMenu={this.handleRightClick}
         onClick={this.handleClick}
+        value={value}
       >
         {this.state.isFlagged ? "🚩" : value}
       </Square>

@@ -1,7 +1,17 @@
 import React, { Component } from "react";
 import Timer from "./components/timerComponent";
+import Count from "./components/countComponent";
 import Cell from "./components/cellComponent";
 import styled from "styled-components";
+
+const Panel = styled.div`
+  display: flex;
+  justify-content: space-between;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+  font-size: 2rem;
+  color: #2e5266;
+`
 
 const Wrapper = styled.span`
   border: 2px solid #b6c3d1;
@@ -116,7 +126,11 @@ class App extends Component {
 
     return (
       <React.Fragment>
-        <Timer />
+        <Panel>
+          <Timer />
+          <span>😎</span>
+          <Count flagged={this.state.mines} />
+        </Panel>
         <Wrapper width={field.width}>{grid}</Wrapper>
       </React.Fragment>
     );

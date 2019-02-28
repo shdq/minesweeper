@@ -1,12 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 
-const Clock = styled.span`
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-  font-size: 2rem;
-  color: #2e5266;
-`;
+const Clock = styled.span``;
 
 class Timer extends Component {
   constructor(props) {

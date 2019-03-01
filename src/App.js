@@ -11,9 +11,9 @@ const Panel = styled.div`
     monospace;
   font-size: 2rem;
   color: #2e5266;
-`
+`;
 
-const Mood = styled.span``
+const Mood = styled.span``;
 
 const Wrapper = styled.span`
   border: 2px solid #b6c3d1;
@@ -113,7 +113,30 @@ class App extends Component {
       height: 9,
       mines: 10,
       mood: "🙂" // 🙂😨😎😵
+    };
+
+    /* initialize the game */
+    const field = new Field(
+      this.state.width,
+      this.state.height,
+      this.state.mines
+    );
+    field.init();
+    console.log(field);
+
+    this.grid = [];
+    for (let i = 0; i < field.width * field.height; i++) {
+      this.grid.push(
+        <Cell
+          key={i.toString()}
+          background={i}
+          value={field.data[i]}
+          onFlagChange={this.handleFlag}
+          flagged={this.state.flagged}
+        />
+      );
     }
+
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
   }
@@ -121,27 +144,16 @@ class App extends Component {
   handleMouseDown() {
     this.setState({
       mood: "😰"
-    })
+    });
   }
 
   handleMouseUp() {
     this.setState({
       mood: "🙂"
-    })
+    });
   }
 
   render() {
-    const field = new Field(this.state.width, this.state.height, this.state.mines);
-    field.init();
-    console.log(field);
-
-    const grid = [];
-    for (let i = 0; i < field.width * field.height; i++) {
-      grid.push(
-        <Cell key={i.toString()} background={i} value={field.data[i]} />
-      );
-    }
-
     return (
       <React.Fragment>
         <Panel>
@@ -149,7 +161,13 @@ class App extends Component {
           <Mood>{this.state.mood}</Mood>
           <Count flagged={this.state.mines} />
         </Panel>
-        <Wrapper onMouseUp={this.handleMouseUp} onMouseDown={this.handleMouseDown} width={field.width}>{grid}</Wrapper>
+        <Wrapper
+          onMouseUp={this.handleMouseUp}
+          onMouseDown={this.handleMouseDown}
+          width={this.state.width}
+        >
+          {this.grid}
+        </Wrapper>
       </React.Fragment>
     );
   }

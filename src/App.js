@@ -129,7 +129,7 @@ class App extends Component {
       this.grid.push(
         <Cell
           key={i.toString()}
-          background={i}
+          index={i}
           value={field.data[i]}
           onFlagChange={this.handleFlag}
           flagged={this.state.flagged}

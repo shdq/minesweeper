@@ -97,7 +97,7 @@ class Cell extends Component {
     this.state.value === 0 ? (value = "") : (value = this.state.value);
     return (
       <Square
-        isEven={this.props.background % 2 === 0 ? true : false}
+        isEven={this.props.index % 2 === 0 ? true : false}
         isOpened={this.state.isOpened}
         isFlagged={this.state.isFlagged}
         onContextMenu={this.handleRightClick}

@@ -26,6 +26,7 @@ class Timer extends Component {
   }
 
   render() {
+    if (this.props.mood === "😵") clearInterval(this.timerID);
     return <Clock>{this.state.time.toString().padStart(3, "0")}</Clock>;
   }
 }

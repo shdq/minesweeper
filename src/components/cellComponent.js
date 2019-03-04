@@ -60,7 +60,7 @@ class Cell extends Component {
     super(props);
     this.state = {
       isFlagged: false,
-      isOpened: false
+      // value: this.props.value
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleRightClick = this.handleRightClick.bind(this);
@@ -72,23 +72,13 @@ class Cell extends Component {
       value: this.props.value,
       index: this.props.index
     });
-    if (!this.state.isFlagged) {
-      this.setState({
-        isOpened: true
-      });
-    }
-    // if (this.state.value === "💣") {
-    //   this.setState({
-    //     value: "💥"
-    //   });
-    // }
     
     console.log("Left click was clicked.");
   }
 
   handleRightClick(e) {
     e.preventDefault();
-    if (!this.state.isOpened) {
+    if (!this.props.isOpened) {
       this.setState(state => ({
         isFlagged: !state.isFlagged
       }));
@@ -102,7 +92,7 @@ class Cell extends Component {
     return (
       <Square
         isEven={this.props.index % 2 === 0 ? true : false}
-        isOpened={this.state.isOpened}
+        isOpened={this.props.isOpened}
         isFlagged={this.state.isFlagged}
         onContextMenu={this.handleRightClick}
         onClick={this.handleClick}

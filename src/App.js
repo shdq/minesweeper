@@ -40,6 +40,10 @@ class Field {
     return this.height;
   }
 
+  mines() {
+    return this.mines;
+  }
+
   get(i, j) {
     if (i > this.height - 1 || j > this.width - 1 || i < 0 || j < 0) {
       // out of range
@@ -103,40 +107,23 @@ class Field {
 class App extends Component {
   constructor(props) {
     super(props);
+
     /*
       easy:   9x9, 10 mines
       medium: 16x16, 40 mines
       hard:   30x12, 99 mines
     */
-    this.state = {
-      width: 9,
-      height: 9,
-      mines: 10,
-      mood: "🙂" // 🙂😨😎😵
-    };
 
     /* initialize the game */
-    const field = new Field(
-      this.state.width,
-      this.state.height,
-      this.state.mines
-    );
-    field.init();
-    console.log(field);
+    const f = new Field(9, 9, 10);
+    f.init();
+    this.state = {
+      mood: "🙂", // 🙂😨😎😵
+      isOpened: new Set(),
+      field: f
+    };
 
-    this.grid = [];
-    for (let i = 0; i < field.width * field.height; i++) {
-      this.grid.push(
-        <Cell
-          key={i.toString()}
-          index={i}
-          value={field.data[i]}
-          onFlagChange={this.handleFlag}
-          flagged={this.state.flagged}
-          onCellClick={cell => this.handleLeftClick(cell)}
-        />
-      );
-    }
+    console.log(this.state.field);
 
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
@@ -157,23 +144,44 @@ class App extends Component {
 
   handleLeftClick(cell) {
     console.log(cell);
+    const opened = this.state.isOpened;
+    opened.add(cell.index);
+    this.setState({
+      isOpened: opened
+    });
+
     if (cell.value === "💣") {
-      this.setState({ mood: "😵" });
+      const f = this.state.field;
+      f.data[cell.index] = "💥";
+      this.setState({ mood: "😵", field: f });
     }
   }
 
   render() {
+    this.grid = [];
+    for (let i = 0; i < this.state.field.width * this.state.field.height; i++) {
+      this.grid.push(
+        <Cell
+          key={i.toString()}
+          index={i}
+          value={this.state.field.data[i]}
+          isOpened={this.state.isOpened.has(i)}
+          onCellClick={cell => this.handleLeftClick(cell)}
+        />
+      );
+    }
+
     return (
       <React.Fragment>
         <Panel>
-          <Timer />
+          <Timer mood={this.state.mood} />
           <Mood>{this.state.mood}</Mood>
-          <Count flagged={this.state.mines} />
+          <Count flagged={this.state.field.mines} />
         </Panel>
         <Wrapper
           onMouseUp={this.handleMouseUp}
           onMouseDown={this.handleMouseDown}
-          width={this.state.width}
+          width={this.state.field.width}
         >
           {this.grid}
         </Wrapper>

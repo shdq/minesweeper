@@ -133,12 +133,14 @@ class App extends Component {
           value={field.data[i]}
           onFlagChange={this.handleFlag}
           flagged={this.state.flagged}
+          onCellClick={cell => this.handleLeftClick(cell)}
         />
       );
     }
 
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
+    this.handleLeftClick = this.handleLeftClick.bind(this);
   }
 
   handleMouseDown() {
@@ -151,6 +153,13 @@ class App extends Component {
     this.setState({
       mood: "🙂"
     });
+  }
+
+  handleLeftClick(cell) {
+    console.log(cell);
+    if (cell.value === "💣") {
+      this.setState({ mood: "😵" });
+    }
   }
 
   render() {

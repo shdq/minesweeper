@@ -201,6 +201,7 @@ class App extends Component {
     this.state = {
       mood: "🙂", // 🙂😨😎😵
       isOpened: new Set(),
+      isFlagged: new Set(),
       field: f
     };
 
@@ -213,12 +214,18 @@ class App extends Component {
   }
 
   // handleMouseDown() {
+  //   if (this.state.mood === "😎" || this.state.mood === "😵") {
+  //     return;
+  //   }
   //   this.setState({
   //     mood: "😰"
   //   });
   // }
 
   // handleMouseUp() {
+  //   if (this.state.mood === "😎" || this.state.mood === "😵") {
+  //     return;
+  //   }
   //   this.setState({
   //     mood: "🙂"
   //   });
@@ -238,6 +245,10 @@ class App extends Component {
       return;
     }
 
+    if (this.state.isFlagged.has(cell.index)) {
+      return;
+    }
+
     console.log(cell);
     const opened = this.state.isOpened;
     opened.add(cell.index);
@@ -248,7 +259,7 @@ class App extends Component {
     if (cell.value === "💣" && this.state.mood !== "😎") {
       const f = this.state.field;
       f.data[cell.index] = "💥";
-      
+
       this.setState({ mood: "😵", field: f, isOpened: this.openCells() });
     }
 
@@ -272,8 +283,31 @@ class App extends Component {
     ) {
       this.setState({
         mood: "😎"
-      })
+      });
     }
+  }
+
+  handleRightClick(cell) {
+    // won or lost disables clicks
+    if (this.state.mood !== "🙂") {
+      return;
+    }
+
+    if (this.state.isOpened.has(cell.index)) {
+      return;
+    }
+
+    console.log(cell);
+    const flagged = this.state.isFlagged;
+    if (flagged.has(cell.index)) {
+      flagged.delete(cell.index);
+    } else {
+      flagged.add(cell.index);
+    }
+
+    this.setState({
+      isFlagged: flagged
+    });
   }
 
   render() {
@@ -288,7 +322,9 @@ class App extends Component {
             coordinates={{ i: i, j: j }}
             value={this.state.field.data[index]}
             isOpened={this.state.isOpened.has(index)}
+            isFlagged={this.state.isFlagged.has(index)}
             onCellClick={cell => this.handleLeftClick(cell)}
+            onRightClick={cell => this.handleRightClick(cell)}
           />
         );
       }
@@ -302,8 +338,8 @@ class App extends Component {
           <Count flagged={this.state.field.mines} />
         </Panel>
         <Wrapper
-          onMouseUp={this.handleMouseUp}
-          onMouseDown={this.handleMouseDown}
+          // onMouseUp={this.handleMouseUp}
+          // onMouseDown={this.handleMouseDown}
           width={this.state.field.width}
         >
           {this.grid}

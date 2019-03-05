@@ -59,10 +59,6 @@ const Square = styled.span`
 class Cell extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isFlagged: false,
-      // value: this.props.value
-    };
     this.handleClick = this.handleClick.bind(this);
     this.handleRightClick = this.handleRightClick.bind(this);
   }
@@ -80,11 +76,11 @@ class Cell extends Component {
 
   handleRightClick(e) {
     e.preventDefault();
-    if (!this.props.isOpened) {
-      this.setState(state => ({
-        isFlagged: !state.isFlagged
-      }));
-    }
+    this.props.onRightClick({
+      value: this.props.value,
+      index: this.props.index,
+      position: this.props.coordinates
+    });
     console.log("Right click was clicked.");
   }
 
@@ -95,12 +91,12 @@ class Cell extends Component {
       <Square
         isEven={this.props.index % 2 === 0 ? true : false}
         isOpened={this.props.isOpened}
-        isFlagged={this.state.isFlagged}
+        isFlagged={this.props.isFlagged}
         onContextMenu={this.handleRightClick}
         onClick={this.handleClick}
         value={value}
       >
-        {this.state.isFlagged ? "🚩" : value}
+        {this.props.isFlagged ? "🚩" : value}
       </Square>
     );
   }

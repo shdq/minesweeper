@@ -210,7 +210,7 @@ class App extends Component {
     // this.handleMouseDown = this.handleMouseDown.bind(this);
     // this.handleMouseUp = this.handleMouseUp.bind(this);
     this.handleLeftClick = this.handleLeftClick.bind(this);
-    this.openCells = this.openCells.bind(this);
+    this.openMines = this.openMines.bind(this);
   }
 
   // handleMouseDown() {
@@ -231,10 +231,10 @@ class App extends Component {
   //   });
   // }
 
-  openCells() {
+  openMines() {
     const opened = this.state.isOpened;
     for (let i = 0; i < this.state.field.width * this.state.field.height; i++) {
-      opened.add(i);
+      if (this.state.field.data[i] === "💣") opened.add(i);
     }
     return opened;
   }
@@ -260,7 +260,7 @@ class App extends Component {
       const f = this.state.field;
       f.data[cell.index] = "💥";
 
-      this.setState({ mood: "😵", field: f, isOpened: this.openCells() });
+      this.setState({ mood: "😵", field: f, isOpened: this.openMines() });
     }
 
     if (cell.value === 0) {

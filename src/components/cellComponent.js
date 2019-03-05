@@ -39,6 +39,7 @@ const Square = styled.span`
     }
   }};
   font-weight: 600;
+  border: 1px solid ${props => (props.isEven || props.isOpened ? "#c8d6e5" : "#b6c3d1")};
 
   &:before {
     position: absolute;

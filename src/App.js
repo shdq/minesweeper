@@ -16,10 +16,10 @@ const Panel = styled.div`
 const Mood = styled.span``;
 
 const Wrapper = styled.span`
-  border: 2px solid #b6c3d1;
+  border: 1px solid #b6c3d1;
   display: flex;
   flex-wrap: wrap;
-  width: ${props => props.width * 40 + "px"};
+  width: ${props => props.width * 42 + "px"};
 `;
 
 class Field {
@@ -113,7 +113,7 @@ class Field {
     if (this.get(...topLeft) >= 0) {
       if (this.get(...topLeft) !== 0) {
         result.add(topLeft[0] * this.width + topLeft[1]);
-      } else if(!result.has(topLeft[0] * this.width + topLeft[1])) {
+      } else if (!result.has(topLeft[0] * this.width + topLeft[1])) {
         toVisit.push(topLeft);
       }
     }
@@ -121,7 +121,7 @@ class Field {
     if (this.get(...top) >= 0) {
       if (this.get(...top) !== 0) {
         result.add(top[0] * this.width + top[1]);
-      } else if(!result.has(top[0] * this.width + top[1])) {
+      } else if (!result.has(top[0] * this.width + top[1])) {
         toVisit.push(top);
       }
     }
@@ -129,7 +129,7 @@ class Field {
     if (this.get(...topRight) >= 0) {
       if (this.get(...topRight) !== 0) {
         result.add(topRight[0] * this.width + topRight[1]);
-      } else if(!result.has(topRight[0] * this.width + topRight[1])) {
+      } else if (!result.has(topRight[0] * this.width + topRight[1])) {
         toVisit.push(topRight);
       }
     }
@@ -137,7 +137,7 @@ class Field {
     if (this.get(...left) >= 0) {
       if (this.get(...left) !== 0) {
         result.add(left[0] * this.width + left[1]);
-      } else if(!result.has(left[0] * this.width + left[1])) {
+      } else if (!result.has(left[0] * this.width + left[1])) {
         toVisit.push(left);
       }
     }
@@ -145,7 +145,7 @@ class Field {
     if (this.get(...right) >= 0) {
       if (this.get(...right) !== 0) {
         result.add(right[0] * this.width + right[1]);
-      } else if(!result.has(right[0] * this.width + right[1])) {
+      } else if (!result.has(right[0] * this.width + right[1])) {
         toVisit.push(right);
       }
     }
@@ -153,7 +153,7 @@ class Field {
     if (this.get(...bottomLeft) >= 0) {
       if (this.get(...bottomLeft) !== 0) {
         result.add(bottomLeft[0] * this.width + bottomLeft[1]);
-      } else if(!result.has(bottomLeft[0] * this.width + bottomLeft[1])) {
+      } else if (!result.has(bottomLeft[0] * this.width + bottomLeft[1])) {
         toVisit.push(bottomLeft);
       }
     }
@@ -161,7 +161,7 @@ class Field {
     if (this.get(...bottom) >= 0) {
       if (this.get(...bottom) !== 0) {
         result.add(bottom[0] * this.width + bottom[1]);
-      } else if(!result.has(bottom[0] * this.width + bottom[1])) {
+      } else if (!result.has(bottom[0] * this.width + bottom[1])) {
         toVisit.push(bottom);
       }
     }
@@ -169,11 +169,11 @@ class Field {
     if (this.get(...bottomRight) >= 0) {
       if (this.get(...bottomRight) !== 0) {
         result.add(bottomRight[0] * this.width + bottomRight[1]);
-      } else if(!result.has(bottomRight[0] * this.width + bottomRight[1])) {
+      } else if (!result.has(bottomRight[0] * this.width + bottomRight[1])) {
         toVisit.push(bottomRight);
       }
     }
-    if(toVisit.length > 0) {
+    if (toVisit.length > 0) {
       this.closest(...toVisit.pop(), result, toVisit);
     }
     return result;
@@ -206,24 +206,38 @@ class App extends Component {
 
     console.log(this.state.field);
 
-    this.handleMouseDown = this.handleMouseDown.bind(this);
-    this.handleMouseUp = this.handleMouseUp.bind(this);
+    // this.handleMouseDown = this.handleMouseDown.bind(this);
+    // this.handleMouseUp = this.handleMouseUp.bind(this);
     this.handleLeftClick = this.handleLeftClick.bind(this);
+    this.openCells = this.openCells.bind(this);
   }
 
-  handleMouseDown() {
-    this.setState({
-      mood: "😰"
-    });
-  }
+  // handleMouseDown() {
+  //   this.setState({
+  //     mood: "😰"
+  //   });
+  // }
 
-  handleMouseUp() {
-    this.setState({
-      mood: "🙂"
-    });
+  // handleMouseUp() {
+  //   this.setState({
+  //     mood: "🙂"
+  //   });
+  // }
+
+  openCells() {
+    const opened = this.state.isOpened;
+    for (let i = 0; i < this.state.field.width * this.state.field.height; i++) {
+      opened.add(i);
+    }
+    return opened;
   }
 
   handleLeftClick(cell) {
+    // won or lost disables clicks
+    if (this.state.mood !== "🙂") {
+      return;
+    }
+
     console.log(cell);
     const opened = this.state.isOpened;
     opened.add(cell.index);
@@ -231,15 +245,15 @@ class App extends Component {
       isOpened: opened
     });
 
-    if (cell.value === "💣") {
+    if (cell.value === "💣" && this.state.mood !== "😎") {
       const f = this.state.field;
       f.data[cell.index] = "💥";
-      this.setState({ mood: "😵", field: f });
+      
+      this.setState({ mood: "😵", field: f, isOpened: this.openCells() });
     }
 
     if (cell.value === 0) {
       const opened = this.state.isOpened;
-      opened.add(cell.position.i * this.state.field.width + cell.position.j);
       const closest = this.state.field.closest(
         cell.position.i,
         cell.position.j
@@ -247,10 +261,18 @@ class App extends Component {
       closest.forEach(element => {
         opened.add(element);
       });
-      console.log({ opened });
       this.setState({
         isOpened: opened
       });
+    }
+
+    if (
+      this.state.isOpened.size ===
+      this.state.field.width * this.state.field.height - this.state.field.mines
+    ) {
+      this.setState({
+        mood: "😎"
+      })
     }
   }
 

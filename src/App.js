@@ -335,7 +335,7 @@ class App extends Component {
         <Panel>
           <Timer mood={this.state.mood} />
           <Mood>{this.state.mood}</Mood>
-          <Count flagged={this.state.field.mines} />
+          <Count flagged={this.state.field.mines - this.state.isFlagged.size} />
         </Panel>
         <Wrapper
           // onMouseUp={this.handleMouseUp}

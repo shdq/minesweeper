@@ -70,7 +70,8 @@ class Cell extends Component {
     e.preventDefault();
     this.props.onCellClick({
       value: this.props.value,
-      index: this.props.index
+      index: this.props.index,
+      position: this.props.coordinates
     });
     
     console.log("Left click was clicked.");

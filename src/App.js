@@ -47,7 +47,7 @@ class Field {
   get(i, j) {
     if (i > this.height - 1 || j > this.width - 1 || i < 0 || j < 0) {
       // out of range
-      return false;
+      return -1;
     }
     return this.data[i * this.width + j];
   }
@@ -96,6 +96,87 @@ class Field {
         this.data[i * this.width + j] = value;
       }
     }
+  }
+
+  closest(i, j, result = new Set(), toVisit = []) {
+    const topLeft = [i - 1, j - 1];
+    const top = [i - 1, j];
+    const topRight = [i - 1, j + 1];
+    const left = [i, j - 1];
+    const right = [i, j + 1];
+    const bottomLeft = [i + 1, j - 1];
+    const bottom = [i + 1, j];
+    const bottomRight = [i + 1, j + 1];
+
+    result.add(i * this.width + j);
+
+    if (this.get(...topLeft) >= 0) {
+      if (this.get(...topLeft) !== 0) {
+        result.add(topLeft[0] * this.width + topLeft[1]);
+      } else if(!result.has(topLeft[0] * this.width + topLeft[1])) {
+        toVisit.push(topLeft);
+      }
+    }
+
+    if (this.get(...top) >= 0) {
+      if (this.get(...top) !== 0) {
+        result.add(top[0] * this.width + top[1]);
+      } else if(!result.has(top[0] * this.width + top[1])) {
+        toVisit.push(top);
+      }
+    }
+
+    if (this.get(...topRight) >= 0) {
+      if (this.get(...topRight) !== 0) {
+        result.add(topRight[0] * this.width + topRight[1]);
+      } else if(!result.has(topRight[0] * this.width + topRight[1])) {
+        toVisit.push(topRight);
+      }
+    }
+
+    if (this.get(...left) >= 0) {
+      if (this.get(...left) !== 0) {
+        result.add(left[0] * this.width + left[1]);
+      } else if(!result.has(left[0] * this.width + left[1])) {
+        toVisit.push(left);
+      }
+    }
+
+    if (this.get(...right) >= 0) {
+      if (this.get(...right) !== 0) {
+        result.add(right[0] * this.width + right[1]);
+      } else if(!result.has(right[0] * this.width + right[1])) {
+        toVisit.push(right);
+      }
+    }
+
+    if (this.get(...bottomLeft) >= 0) {
+      if (this.get(...bottomLeft) !== 0) {
+        result.add(bottomLeft[0] * this.width + bottomLeft[1]);
+      } else if(!result.has(bottomLeft[0] * this.width + bottomLeft[1])) {
+        toVisit.push(bottomLeft);
+      }
+    }
+
+    if (this.get(...bottom) >= 0) {
+      if (this.get(...bottom) !== 0) {
+        result.add(bottom[0] * this.width + bottom[1]);
+      } else if(!result.has(bottom[0] * this.width + bottom[1])) {
+        toVisit.push(bottom);
+      }
+    }
+
+    if (this.get(...bottomRight) >= 0) {
+      if (this.get(...bottomRight) !== 0) {
+        result.add(bottomRight[0] * this.width + bottomRight[1]);
+      } else if(!result.has(bottomRight[0] * this.width + bottomRight[1])) {
+        toVisit.push(bottomRight);
+      }
+    }
+    if(toVisit.length > 0) {
+      this.closest(...toVisit.pop(), result, toVisit);
+    }
+    return result;
   }
 
   init() {
@@ -155,20 +236,40 @@ class App extends Component {
       f.data[cell.index] = "💥";
       this.setState({ mood: "😵", field: f });
     }
+
+    if (cell.value === 0) {
+      const opened = this.state.isOpened;
+      opened.add(cell.position.i * this.state.field.width + cell.position.j);
+      const closest = this.state.field.closest(
+        cell.position.i,
+        cell.position.j
+      );
+      closest.forEach(element => {
+        opened.add(element);
+      });
+      console.log({ opened });
+      this.setState({
+        isOpened: opened
+      });
+    }
   }
 
   render() {
     this.grid = [];
-    for (let i = 0; i < this.state.field.width * this.state.field.height; i++) {
-      this.grid.push(
-        <Cell
-          key={i.toString()}
-          index={i}
-          value={this.state.field.data[i]}
-          isOpened={this.state.isOpened.has(i)}
-          onCellClick={cell => this.handleLeftClick(cell)}
-        />
-      );
+    for (let i = 0; i < this.state.field.height; i++) {
+      for (let j = 0; j < this.state.field.width; j++) {
+        const index = i * this.state.field.width + j;
+        this.grid.push(
+          <Cell
+            key={index.toString()}
+            index={index}
+            coordinates={{ i: i, j: j }}
+            value={this.state.field.data[index]}
+            isOpened={this.state.isOpened.has(index)}
+            onCellClick={cell => this.handleLeftClick(cell)}
+          />
+        );
+      }
     }
 
     return (

@@ -234,7 +234,8 @@ class App extends Component {
   openMines() {
     const opened = this.state.isOpened;
     for (let i = 0; i < this.state.field.width * this.state.field.height; i++) {
-      if (this.state.field.data[i] === "💣" && !this.state.isFlagged.has(i)) opened.add(i);
+      if (this.state.field.data[i] === "💣" && !this.state.isFlagged.has(i))
+        opened.add(i);
     }
     return opened;
   }

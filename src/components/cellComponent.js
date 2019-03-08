@@ -20,6 +20,13 @@ const Square = styled.span`
   justify-content: center;
   font-size: 1.5rem;
   cursor: default;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
   color: ${props => {
     switch (props.value) {
       case 1:

@@ -315,17 +315,14 @@ class App extends Component {
   }
 
   restartGame() {
-    if(this.state.mood === "😵") {
-      const f = new Field(9, 9, 10);
-      f.init();
-      this.setState({
-        mood: "🙂",
-        isOpened: new Set(),
-        isFlagged: new Set(),
-        field: f
-      });
-      console.log("restarted");
-    }
+    const f = new Field(9, 9, 10);
+    f.init();
+    this.setState({
+      mood: "🙂",
+      isOpened: new Set(),
+      isFlagged: new Set(),
+      field: f
+    });
   }
 
   render() {

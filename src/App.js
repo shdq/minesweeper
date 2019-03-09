@@ -13,7 +13,9 @@ const Panel = styled.div`
   color: #2e5266;
 `;
 
-const Mood = styled.span``;
+const Mood = styled.span`
+  cursor: pointer
+`;
 
 const Wrapper = styled.span`
   border: 1px solid #b6c3d1;
@@ -211,6 +213,7 @@ class App extends Component {
     // this.handleMouseUp = this.handleMouseUp.bind(this);
     this.handleLeftClick = this.handleLeftClick.bind(this);
     this.openMines = this.openMines.bind(this);
+    this.restartGame = this.restartGame.bind(this);
   }
 
   // handleMouseDown() {
@@ -311,6 +314,20 @@ class App extends Component {
     });
   }
 
+  restartGame() {
+    if(this.state.mood === "😵") {
+      const f = new Field(9, 9, 10);
+      f.init();
+      this.setState({
+        mood: "🙂",
+        isOpened: new Set(),
+        isFlagged: new Set(),
+        field: f
+      });
+      console.log("restarted");
+    }
+  }
+
   render() {
     this.grid = [];
     for (let i = 0; i < this.state.field.height; i++) {
@@ -335,7 +352,7 @@ class App extends Component {
       <React.Fragment>
         <Panel>
           <Timer mood={this.state.mood} />
-          <Mood>{this.state.mood}</Mood>
+          <Mood onClick={this.restartGame}>{this.state.mood}</Mood>
           <Count flagged={this.state.field.mines - this.state.isFlagged.size} />
         </Panel>
         <Wrapper

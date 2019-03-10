@@ -20,9 +20,9 @@ class Timer extends Component {
   }
 
   tick() {
-    this.setState(state => ({
-      date: state.time++
-    }));
+    this.setState(state => {
+      return { time: state.time + 1 };
+    });
   }
 
   render() {

@@ -284,7 +284,9 @@ class App extends Component {
 
     if (
       this.state.isOpened.size ===
-      this.state.field.width * this.state.field.height - this.state.field.mines
+        this.state.field.width * this.state.field.height -
+          this.state.field.mines &&
+      cell.value !== "💣"
     ) {
       this.setState({
         mood: "😎"

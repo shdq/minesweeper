@@ -19,6 +19,14 @@ class Timer extends Component {
     clearInterval(this.timerID);
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.restarted !== prevProps.restarted) {
+      clearInterval(this.timerID);
+      this.setState({ time: 0 });
+      this.timerID = setInterval(() => this.tick(), 1000);
+    }
+  }
+
   tick() {
     this.setState(state => {
       return { time: state.time + 1 };

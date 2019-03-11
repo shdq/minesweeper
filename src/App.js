@@ -14,7 +14,7 @@ const Panel = styled.div`
 `;
 
 const Mood = styled.span`
-  cursor: pointer
+  cursor: pointer;
 `;
 
 const Wrapper = styled.span`
@@ -204,7 +204,8 @@ class App extends Component {
       mood: "🙂", // 🙂😨😎😵
       isOpened: new Set(),
       isFlagged: new Set(),
-      field: f
+      field: f,
+      restarted: 0
     };
 
     console.log(this.state.field);
@@ -315,13 +316,15 @@ class App extends Component {
   }
 
   restartGame() {
+    const restart = this.state.restarted + 1;
     const f = new Field(9, 9, 10);
     f.init();
     this.setState({
       mood: "🙂",
       isOpened: new Set(),
       isFlagged: new Set(),
-      field: f
+      field: f,
+      restarted: restart
     });
   }
 
@@ -348,7 +351,7 @@ class App extends Component {
     return (
       <React.Fragment>
         <Panel>
-          <Timer mood={this.state.mood} />
+          <Timer mood={this.state.mood} restarted={this.state.restarted} />
           <Mood onClick={this.restartGame}>{this.state.mood}</Mood>
           <Count flagged={this.state.field.mines - this.state.isFlagged.size} />
         </Panel>

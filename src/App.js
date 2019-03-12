@@ -240,8 +240,8 @@ class App extends Component {
     for (let i = 0; i < this.state.field.width * this.state.field.height; i++) {
       if (this.state.field.data[i] === "💣" && !this.state.isFlagged.has(i))
         opened.add(i);
-        // it opens cell with a flag that placed not on the mine
-        if (this.state.field.data[i] !== "💣" && this.state.isFlagged.has(i))
+      // it opens cell with a flag that placed not on the mine
+      if (this.state.field.data[i] !== "💣" && this.state.isFlagged.has(i))
         opened.add(i);
     }
     return opened;
@@ -278,7 +278,7 @@ class App extends Component {
         cell.position.j
       );
       closest.forEach(element => {
-        opened.add(element);
+        if (!this.state.isFlagged.has(element)) opened.add(element);
       });
       this.setState({
         isOpened: opened

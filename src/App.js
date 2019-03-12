@@ -208,32 +208,10 @@ class App extends Component {
       restarted: 0
     };
 
-    console.log(this.state.field);
-
-    // this.handleMouseDown = this.handleMouseDown.bind(this);
-    // this.handleMouseUp = this.handleMouseUp.bind(this);
     this.handleLeftClick = this.handleLeftClick.bind(this);
     this.openMines = this.openMines.bind(this);
     this.restartGame = this.restartGame.bind(this);
   }
-
-  // handleMouseDown() {
-  //   if (this.state.mood === "😎" || this.state.mood === "😵") {
-  //     return;
-  //   }
-  //   this.setState({
-  //     mood: "😰"
-  //   });
-  // }
-
-  // handleMouseUp() {
-  //   if (this.state.mood === "😎" || this.state.mood === "😵") {
-  //     return;
-  //   }
-  //   this.setState({
-  //     mood: "🙂"
-  //   });
-  // }
 
   openMines() {
     const opened = this.state.isOpened;
@@ -257,7 +235,6 @@ class App extends Component {
       return;
     }
 
-    console.log(cell);
     const opened = this.state.isOpened;
     opened.add(cell.index);
     this.setState({
@@ -267,7 +244,6 @@ class App extends Component {
     if (cell.value === "💣" && this.state.mood !== "😎") {
       const f = this.state.field;
       f.data[cell.index] = "💥";
-
       this.setState({ mood: "😵", field: f, isOpened: this.openMines() });
     }
 
@@ -307,7 +283,6 @@ class App extends Component {
       return;
     }
 
-    console.log(cell);
     const flagged = this.state.isFlagged;
     if (flagged.has(cell.index)) {
       flagged.delete(cell.index);
@@ -360,13 +335,7 @@ class App extends Component {
           <Mood onClick={this.restartGame}>{this.state.mood}</Mood>
           <Count flagged={this.state.field.mines - this.state.isFlagged.size} />
         </Panel>
-        <Wrapper
-          // onMouseUp={this.handleMouseUp}
-          // onMouseDown={this.handleMouseDown}
-          width={this.state.field.width}
-        >
-          {this.grid}
-        </Wrapper>
+        <Wrapper width={this.state.field.width}>{this.grid}</Wrapper>
       </React.Fragment>
     );
   }

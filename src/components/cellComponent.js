@@ -2,18 +2,28 @@ import React, { Component } from "react";
 
 import styled from "styled-components";
 
+const Cross = styled.span`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -12.5px;
+  margin-top: -12.5px;
+`;
+
 const Square = styled.span`
   position: relative;
   width: 40px;
   height: 40px;
   background-color: ${props => {
+    if (!props.isFlagged || (props.isFlagged && props.isOpened)) {
+      return "#ebf0f5";
+    }
     if (props.isFlagged && props.isEven) {
       return "#c8d6e5";
     }
     if (props.isFlagged && !props.isEven) {
       return "#b6c3d1";
     }
-    if (!props.isFlagged) return "#ebf0f5;";
   }};
   display: inline-flex;
   align-items: center;
@@ -78,8 +88,6 @@ class Cell extends Component {
       index: this.props.index,
       position: this.props.coordinates
     });
-
-    console.log("Left click was clicked.");
   }
 
   handleRightClick(e) {
@@ -89,7 +97,6 @@ class Cell extends Component {
       index: this.props.index,
       position: this.props.coordinates
     });
-    console.log("Right click was clicked.");
   }
 
   render() {
@@ -104,7 +111,19 @@ class Cell extends Component {
         onClick={this.handleClick}
         value={value}
       >
-        {this.props.isFlagged ? "🚩" : value}
+        {this.props.isFlagged && this.props.isOpened ? (
+          <React.Fragment>
+            {value}
+            {/* eslint-disable jsx-a11y/accessible-emoji */}
+            <Cross role="img" aria-label="Cross mark">
+              ❌
+            </Cross>
+          </React.Fragment>
+        ) : this.props.isFlagged ? (
+          "🚩"
+        ) : (
+          value
+        )}
       </Square>
     );
   }

@@ -74,81 +74,51 @@ class Field {
     }
   }
 
-  closest(i, j, result = new Set(), toVisit = []) {
+  closestCells(i, j) {
     const topLeft = [i - 1, j - 1];
     const top = [i - 1, j];
     const topRight = [i - 1, j + 1];
-    const left = [i, j - 1];
     const right = [i, j + 1];
-    const bottomLeft = [i + 1, j - 1];
-    const bottom = [i + 1, j];
     const bottomRight = [i + 1, j + 1];
+    const bottom = [i + 1, j];
+    const bottomLeft = [i + 1, j - 1];
+    const left = [i, j - 1];
 
+    const directons = [
+      topLeft,
+      top,
+      topRight,
+      right,
+      bottomRight,
+      bottom,
+      bottomLeft,
+      left
+    ];
+
+    const closest = [];
+
+    directons.forEach(direction => {
+      if (this.get(...direction) !== -1) {
+        closest.push(direction);
+      }
+    });
+
+    return closest;
+  }
+
+  closest(i, j, result = new Set(), toVisit = []) {
     result.add(i * this.width + j);
 
-    if (this.get(...topLeft) >= 0) {
-      if (this.get(...topLeft) !== 0) {
-        result.add(topLeft[0] * this.width + topLeft[1]);
-      } else if (!result.has(topLeft[0] * this.width + topLeft[1])) {
-        toVisit.push(topLeft);
-      }
-    }
+    const closestCells = this.closestCells(i, j);
 
-    if (this.get(...top) >= 0) {
-      if (this.get(...top) !== 0) {
-        result.add(top[0] * this.width + top[1]);
-      } else if (!result.has(top[0] * this.width + top[1])) {
-        toVisit.push(top);
+    closestCells.forEach(coordinates => {
+      if (this.get(...coordinates) !== 0) {
+        result.add(coordinates[0] * this.width + coordinates[1]);
+      } else if (!result.has(coordinates[0] * this.width + coordinates[1])) {
+        toVisit.push(coordinates);
       }
-    }
+    });
 
-    if (this.get(...topRight) >= 0) {
-      if (this.get(...topRight) !== 0) {
-        result.add(topRight[0] * this.width + topRight[1]);
-      } else if (!result.has(topRight[0] * this.width + topRight[1])) {
-        toVisit.push(topRight);
-      }
-    }
-
-    if (this.get(...left) >= 0) {
-      if (this.get(...left) !== 0) {
-        result.add(left[0] * this.width + left[1]);
-      } else if (!result.has(left[0] * this.width + left[1])) {
-        toVisit.push(left);
-      }
-    }
-
-    if (this.get(...right) >= 0) {
-      if (this.get(...right) !== 0) {
-        result.add(right[0] * this.width + right[1]);
-      } else if (!result.has(right[0] * this.width + right[1])) {
-        toVisit.push(right);
-      }
-    }
-
-    if (this.get(...bottomLeft) >= 0) {
-      if (this.get(...bottomLeft) !== 0) {
-        result.add(bottomLeft[0] * this.width + bottomLeft[1]);
-      } else if (!result.has(bottomLeft[0] * this.width + bottomLeft[1])) {
-        toVisit.push(bottomLeft);
-      }
-    }
-
-    if (this.get(...bottom) >= 0) {
-      if (this.get(...bottom) !== 0) {
-        result.add(bottom[0] * this.width + bottom[1]);
-      } else if (!result.has(bottom[0] * this.width + bottom[1])) {
-        toVisit.push(bottom);
-      }
-    }
-
-    if (this.get(...bottomRight) >= 0) {
-      if (this.get(...bottomRight) !== 0) {
-        result.add(bottomRight[0] * this.width + bottomRight[1]);
-      } else if (!result.has(bottomRight[0] * this.width + bottomRight[1])) {
-        toVisit.push(bottomRight);
-      }
-    }
     if (toVisit.length > 0) {
       this.closest(...toVisit.pop(), result, toVisit);
     }

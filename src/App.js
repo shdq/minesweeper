@@ -135,7 +135,7 @@ class App extends Component {
 
   restartGame() {
     const restart = this.state.restarted + 1;
-    const f = new Field(9, 9, 10);
+    const f = new Field(this.state.field.width, this.state.field.height, this.state.field.mines);
     f.init();
     this.setState({
       mood: "🙂",

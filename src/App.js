@@ -73,6 +73,46 @@ class App extends Component {
       return;
     }
 
+    if (cell.value > 0 && this.state.isOpened.has(cell.index)) {
+      let flags = 0;
+      const nearest = this.state.field.closestCells(
+        cell.position.i,
+        cell.position.j
+      );
+      nearest.forEach(coordinates => {
+        const index = coordinates[0] * this.state.field.width + coordinates[1];
+        if (this.state.isFlagged.has(index)) {
+          flags++;
+        }
+      });
+
+      if (flags === cell.value) {
+        const opened = this.state.isOpened;
+        const closest = this.state.field.closest(
+          cell.position.i,
+          cell.position.j
+        );
+        let gameOver = false;
+        const f = this.state.field;
+        closest.forEach(cellIndex => {
+          if (!this.state.isFlagged.has(cellIndex)) {
+            if (f.data[cellIndex] === "💣") {
+              f.data[cellIndex] = "💥";
+              gameOver = true;
+            }
+            opened.add(cellIndex);
+          }
+        });
+        if (gameOver) {
+          this.setState({ mood: "😵", field: f, isOpened: this.openMines() });
+          return;
+        }
+        this.setState({
+          isOpened: opened
+        });
+      }
+    }
+
     const opened = this.state.isOpened;
     opened.add(cell.index);
     this.setState({
@@ -135,7 +175,11 @@ class App extends Component {
 
   restartGame() {
     const restart = this.state.restarted + 1;
-    const f = new Field(this.state.field.width, this.state.field.height, this.state.field.mines);
+    const f = new Field(
+      this.state.field.width,
+      this.state.field.height,
+      this.state.field.mines
+    );
     f.init();
     this.setState({
       mood: "🙂",

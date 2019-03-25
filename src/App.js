@@ -191,13 +191,19 @@ class App extends Component {
   }
 
   render() {
+    let isEven = false;
     this.grid = [];
     for (let i = 0; i < this.state.field.height; i++) {
       for (let j = 0; j < this.state.field.width; j++) {
         const index = i * this.state.field.width + j;
+        isEven = !isEven;
+        const isFirstInRow =
+          (index + 1) % this.state.field.width === 1 ? true : false;
+        if (isFirstInRow && this.state.field.width % 2 === 0) isEven = !isEven;
         this.grid.push(
           <Cell
             key={index.toString()}
+            isEven={isEven}
             index={index}
             coordinates={{ i: i, j: j }}
             value={this.state.field.data[index]}

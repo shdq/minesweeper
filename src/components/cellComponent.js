@@ -79,6 +79,8 @@ class Cell extends Component {
     super(props);
     this.handleClick = this.handleClick.bind(this);
     this.handleRightClick = this.handleRightClick.bind(this);
+    this.handleLongTouch = this.handleLongTouch.bind(this);
+    this.handleTouchEnd = this.handleTouchEnd.bind(this);
   }
 
   handleClick(e) {
@@ -99,11 +101,33 @@ class Cell extends Component {
     });
   }
 
+  handleLongTouch() {
+    this.longPressTimerId = setTimeout(() => {
+      this.longPressed = true;
+      this.props.onRightClick({
+        value: this.props.value,
+        index: this.props.index,
+        position: this.props.coordinates
+      });
+    }, 500);
+  }
+
+  handleTouchEnd(e) {
+    clearTimeout(this.longPressTimerId);
+    // to prevent click event, that uncovers the cell
+    if (this.longPressed) {
+      e.preventDefault();
+      this.longPressed = false;
+    }
+  }
+
   render() {
     let value;
     this.props.value === 0 ? (value = "") : (value = this.props.value);
     return (
       <Square
+        onTouchStart={this.handleLongTouch}
+        onTouchEnd={this.handleTouchEnd}
         isEven={this.props.isEven}
         isOpened={this.props.isOpened}
         isFlagged={this.props.isFlagged}

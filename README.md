@@ -7,7 +7,7 @@ Minesweeper is a puzzle game that wrote using `reactjs` and `styled-components`.
 
 ### Rules
 
- You should uncover all the "safe" cells without clicking a cell containing a mine. When you click on cell, you will see numbers. Each number represents the number of mines adjacent to that cell. Mark mined cells with a 🚩using right-click. Counter on the top right shows you how many mines have left.
+ You should uncover all the "safe" cells without clicking a cell containing a mine. When you click on cell, you will see numbers. Each number represents the number of mines adjacent to that cell. Mark mined cells with a 🚩using right-click (long touch on mobile). Counter on the top right shows you how many mines have left.
  
  Left click on an uncovered cell, that has all of it's adjacent mines flagged 🚩, it will automatically uncover the remaining mines to save time.
  

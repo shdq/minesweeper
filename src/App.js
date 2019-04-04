@@ -14,8 +14,15 @@ const Panel = styled.div`
   color: #2e5266;
 `;
 
-const Mood = styled.span`
+const Mood = styled.button`
   cursor: pointer;
+  border: 0;
+  background: none;
+  font-size: 2rem;
+
+  &:focus {
+    outline: 3px solid rgba(59, 153, 252, 0.7);
+  }
 `;
 
 const Wrapper = styled.span`
@@ -303,7 +310,7 @@ class App extends Component {
       <React.Fragment>
         <Panel>
           <Timer mood={this.state.mood} restarted={this.state.restarted} />
-          <Mood onClick={this.restartGame}>{this.state.mood}</Mood>
+          <Mood aria-label="Restart game" onClick={this.restartGame}>{this.state.mood}</Mood>
           <Count flagged={this.state.field.mines - this.state.isFlagged.size} />
         </Panel>
         <Wrapper width={this.state.field.width}>{this.grid}</Wrapper>
@@ -311,6 +318,7 @@ class App extends Component {
           <label>
             Difficulty&nbsp;
             <Select
+              aria-label="Game difficulty"
               value={this.state.difficulty}
               onChange={this.handleDifficultyChange}
             >

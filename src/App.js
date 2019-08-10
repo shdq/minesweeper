@@ -5,6 +5,11 @@ import Cell from "./components/cellComponent";
 import styled from "styled-components";
 import Field from "./utility/Field";
 
+const Game = styled.div`
+  max-width: ${props => props.fieldWidth * 42 + "px"};
+  margin: 0 auto;
+`;
+
 const Panel = styled.div`
   display: flex;
   justify-content: space-between;
@@ -25,11 +30,18 @@ const Mood = styled.button`
   }
 `;
 
+const Scroll = styled.div`
+  overflow-x: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
 const Wrapper = styled.span`
   border: 1px solid #b6c3d1;
   display: flex;
   flex-wrap: wrap;
-  width: ${props => props.width * 42 + "px"};
+  width: ${props => props.fieldWidth * 42 + "px"};
 `;
 
 const Difficulty = styled.span`
@@ -307,13 +319,15 @@ class App extends Component {
     }
 
     return (
-      <React.Fragment>
+      <Game fieldWidth={this.state.field.width}>
         <Panel>
           <Timer mood={this.state.mood} restarted={this.state.restarted} />
           <Mood aria-label="Restart game" onClick={this.restartGame}>{this.state.mood}</Mood>
           <Count flagged={this.state.field.mines - this.state.isFlagged.size} />
         </Panel>
-        <Wrapper width={this.state.field.width}>{this.grid}</Wrapper>
+        <Scroll>
+          <Wrapper fieldWidth={this.state.field.width}>{this.grid}</Wrapper>
+        </Scroll>
         <Difficulty>
           <label>
             Difficulty&nbsp;
@@ -328,7 +342,7 @@ class App extends Component {
             </Select>
           </label>
         </Difficulty>
-      </React.Fragment>
+      </Game>
     );
   }
 }

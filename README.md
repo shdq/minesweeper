@@ -1,9 +1,5 @@
 ## Minesweeper
 
-<p align="center">
-<img src="https://cherniaev.com/minesweeper/Screenshot-intermediate.png" width="400" />
-</p>
-
 Minesweeper is a puzzle game that wrote using `reactjs` and `styled-components`. It works perfectly on desktop and mobile devices.
 
 ### Rules
